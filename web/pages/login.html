@@ -1,0 +1,40 @@
+<div>
+    <div class="col-lg-3 col-md-3 col-sm-2"></div>
+    <div class="col-lg-6 col-md-6 col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-signin">
+                    <h2 class="form-signin-heading">Autenticação</h2>
+
+                    <div class="form-group">
+                        <label for="inputEmail">Endereço de e-mail</label>
+                        <input type="email" ng-model="form.inputEmail" class="form-control" placeholder="E-Mail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="{{ showPassword ? 'text' : 'password' }}" ng-model="form.inputPassword" class="form-control" placeholder="Senha" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="inputShowPassword" ng-model="showPassword">
+                        <label for="inputShowPassword">Mostrar Senha</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" ng-model="inputRememberMe" value="remember-me"> Lembrar-me neste computador
+                        </label>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" ng-click="login()">Entrar</button>
+                    <br/>
+                    <p>
+                        <a href="#/forgotpassword">Esqueci minha senha</a>
+                    </p>
+                    <p>
+                        <a href="#/register">Quero criar uma conta</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-2"></div>
+</div>

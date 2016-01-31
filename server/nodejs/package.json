@@ -1,0 +1,19 @@
+{
+  "name": "promoter-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "jwt-simple": "^0.4.0",
+    "log": "^1.4.0",
+    "mongoose": "^4.3.3",
+    "morgan": "^1.6.1",
+    "passport": "^0.3.2",
+    "passport-jwt": "^1.2.1"
+  }
+}

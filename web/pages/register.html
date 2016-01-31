@@ -1,0 +1,35 @@
+<div>
+    <div class="col-lg-3 col-md-3 col-sm-12"></div>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-signin" name="registerForm">
+                    <h2 class="form-signin-heading">Registro</h2>
+                    <h5 style="color: #999">Preencha os campos para criar uma nova conta</h5>
+                    <br/>
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="name" ng-model="form.inputName" class="form-control" placeholder="Nome Completo" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">Endereço de e-mail</label>
+                        <input type="email" ng-model="form.inputEmail" class="form-control" placeholder="E-Mail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="{{ showPassword ? 'text' : 'password' }}" ng-model="form.inputPassword" class="form-control" placeholder="Senha" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="inputShowPassword" ng-model="showPassword">
+                        <label for="inputShowPassword">Mostrar Senha</label>
+                    </div>
+                    <button class="btn btn-lg btn-success btn-block" ng-click="register()">Registrar</button>
+                    <br/>
+                    
+                    <div class="alert alert-danger" role="alert" ng-show="errorMessage">{{errorMessage}}</div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-12"></div>
+</div>
