@@ -1,16 +1,46 @@
+<!--  MENU  -->
 <div class="col-lg-3 col-md-3 col-sm-12">
     <div class="panel panel-default">
         <div class="panel-heading">
             MENU
         </div>
         <div class="panel-body">
-            <button type="button" class="btn btn-primary btn-block">
+            <button type="button" class="btn btn-primary btn-block" ng-click="showNewOccurrence = true">
                 Nova Ocorrência
             </button>
         </div>
     </div>
 </div>
 <div class="col-lg-9 col-md-9 col-sm-12">
+
+    <!--  CRIAR OCORRENCIA  -->
+    <div class="panel panel-success" ng-show="showNewOccurrence">
+        <div class="panel-heading">
+            Criando nova occorência
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <textarea id="inputMessage" ng-model="newOccurrenceForm.inputMessage" class="form-control" placeholder="Escreva aqui sua mensagem" required></textarea>
+            </div>
+            <button class="btn btn-primary" ng-click="createOccurrence()">Criar Ocorrência</button>
+        </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="panel panel-default" ng-repeat="occurrence in occurrences | reverse">
+        <div class="panel-body">
+            <div class="col-lg-12">
+                <span class="occurrence-author">{{getUser(occurrence.author)}} João Eduardo Galli</span>
+
+                <span class="occurrence-publish-date">{{ occurrence.timestamp | date:'MMMM' : 'America/Sao_Paulo' }}</span>
+                <br/>
+                <span class="occurrence-message">
+                    {{ occurrence.message }}
+                </span>
+            </div>
+        </div>
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-heading">
             Houston, we have a problem.
@@ -33,21 +63,17 @@
         </div>
 
         <div class="panel-footer" style="height: 40px">
-            <div class="col-lg-9">
-                <a href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comentários <span class="badge">2</span></a>
-            </div>
-            <div class="col-lg-3" style="text-align: right;">
-                <a href="#"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Acompanhar</a>
+            <div>
+                <div class="col-lg-9">
+                    <a href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comentários <span class="badge">2</span></a>
+                </div>
+                <div class="col-lg-3" style="text-align: right;">
+                    <a href="#"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Acompanhar</a>
+                </div>
             </div>
         </div>
         <div style="padding: 10px">
             <textarea class="form-control">Escreva um comentário</textarea>
-        </div>
-    </div>
-
-    <div class="panel panel-danger">
-        <div class="panel-body">
-            <img src="http://gmtaride.org/wordpress/wp-content/uploads/alert-orange.png" /> #2
         </div>
     </div>
 

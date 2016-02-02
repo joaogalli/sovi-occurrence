@@ -7,6 +7,12 @@ app.factory("Auth", ["$firebaseAuth",
   }
 ]);
 
+app.filter('reverse', function () {
+    return function (items) {
+        return items.slice().reverse();
+    };
+});
+
 app.config(function ($routeProvider) {
 
     $routeProvider
@@ -82,6 +88,7 @@ app.controller('NavController', ['$scope', '$location', 'Auth', function ($scope
         Auth.$unauth();
         $location.path('/');
     };
+
 }]);
 
 app.controller('LoginController', ['$scope', '$routeParams', '$location', 'Auth', 'currentAuth', function ($scope, $routeParams, $location, Auth, currentAuth) {
@@ -104,7 +111,31 @@ app.controller('LoginController', ['$scope', '$routeParams', '$location', 'Auth'
     };
 }]);
 
-app.controller('LoggedController', ['$scope', 'Auth', function ($scope, Auth) {
+app.controller('LoggedController', ['$scope', 'Auth', 'currentAuth', '$firebaseArray', function ($scope, Auth, currentAuth, $firebaseArray) {
+    console.info("currentAuth: ", currentAuth);
+
+    $scope.showNewOccurrence = false;
+    $scope.newOccurrenceForm = {};
+
+    var ref = new Firebase("https://fiery-fire-206.firebaseio.com/occurrences");
+    var occurrences = $firebaseArray(ref);
+
+    var query = ref.orderByChild("timestamp").limitToLast(2);
+    var filteredOccurrences = $firebaseArray(query);
+
+    $scope.occurrences = angular.copy(filteredOccurrences);
+
+    console.log("occurrences: ", $scope.occurrences);
+    console.log("filteredOccurrences: ", $scope.filteredOccurrences);
+
+    $scope.createOccurrence = function () {
+        ref.push({
+            timestamp: Firebase.ServerValue.TIMESTAMP,
+            message: $scope.newOccurrenceForm.inputMessage,
+            author: currentAuth.auth.uid
+        });
+        $scope.showNewOccurrence = false;
+    };
 
 }]);
 
@@ -121,6 +152,7 @@ app.controller('RegisterController', ['$scope', '$location', 'Auth', function ($
             password: $scope.form.inputPassword
         }).then(function (userData) {
             console.log('Usuário cadastrado: ', userData);
+            // cdastrar um user para os dados
             $scope.successMessage = "Seu cadastro foi efetuado com sucesso.";
             $location.path('/loginAfterRegister/' + $scope.form.inputEmail);
         }).catch(function (error) {
