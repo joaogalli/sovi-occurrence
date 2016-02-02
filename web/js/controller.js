@@ -33,29 +33,87 @@ app.controller('LoginController', ['$scope', '$routeParams', '$location', 'Auth'
     };
 }]);
 
-app.controller('LoggedController', ['$scope', 'Auth', 'currentAuth', '$firebaseArray', 'userService', function ($scope, Auth, currentAuth, $firebaseArray, userService) {
+app.factory('$pageArray', ['$firebaseArray', function ($firebaseArray) {
+    return function (ref, field) {
+        // create a Paginate reference
+        var pageRef = new Firebase.util.Paginate(ref, field, {
+            maxCacheSize: 250,
+            pageSize: 2
+        });
+        // generate a synchronized array using the special page ref
+        var list = $firebaseArray(pageRef);
+        // store the "page" scope on the synchronized array for easy access
+        list.page = pageRef.page;
+
+        // when the page count loads, update local scope vars
+        pageRef.page.onPageCount(function (currentPageCount, couldHaveMore) {
+            list.pageCount = currentPageCount;
+            list.couldHaveMore = couldHaveMore;
+        });
+
+        // when the current page is changed, update local scope vars
+        pageRef.page.onPageChange(function (currentPageNumber) {
+            list.currentPageNumber = currentPageNumber;
+        });
+
+        // load the first page
+        pageRef.page.next();
+
+        return list;
+    }
+}]);
+
+app.controller('LoggedController', ['$scope', 'Auth', 'currentAuth', '$firebaseArray', 'userService', '$pageArray', function ($scope, Auth, currentAuth, $firebaseArray, userService, $pageArray) {
     //    console.info("currentAuth: ", currentAuth);
 
     $scope.showNewOccurrence = false;
     $scope.newOccurrenceForm = {};
     $scope.occurrences = [];
+    $scope.showOccurrenceCreationSuccess = false;
+    $scope.showOccurrenceCreationFailure = false;
 
     var ref = new Firebase("https://fiery-fire-206.firebaseio.com/occurrences");
+    // Antigo método de buscar as ocorrências, sem paginação
     //    $scope.occurrences = $firebaseArray(ref);
+    //    var query = ref.orderByChild("timestamp").limitToLast(2).on('child_added', function (snapshot) {
+    //        $scope.$apply(function () {
+    //            $scope.occurrences.push(snapshot.val());
+    //        });
+    //    });
 
-    var query = ref.orderByChild("timestamp").limitToLast(2).on('child_added', function (snapshot) {
-        $scope.$apply(function () {
-            $scope.occurrences.push(snapshot.val());
-        });
-    });
+    $scope.occurrences = $pageArray(ref, 'timestamp');
 
     $scope.createOccurrence = function () {
-        ref.push({
+        var puss = ref.push({
             timestamp: Firebase.ServerValue.TIMESTAMP,
             message: $scope.newOccurrenceForm.inputMessage,
             author: currentAuth.auth.uid
+        }, function (error) {
+            if (error) {
+                console.error('Error saving: ', error);
+                $scope.$apply(function () {
+                    $scope.showOccurrenceCreationSuccess = false;
+                    $scope.showOccurrenceCreationFailure = true;
+                });
+            } else {
+                $scope.$apply(function () {
+                    $scope.showOccurrenceCreationSuccess = true;
+                    $scope.showOccurrenceCreationFailure = false;
+                    $scope.showNewOccurrence = false;
+                });
+            }
         });
-        $scope.showNewOccurrence = false;
+        // Se salvou corretamente, deve inverter o timestamp para negativo
+        if (puss) {
+            var timestamp = null;
+            puss.child('timestamp').on('value', function (ss) {
+                console.log('timestamp: ', ss.val());
+                timestamp = ss.val();
+            });
+            puss.update({
+                timestamp: (timestamp * -1)
+            });
+        }
     };
 
     $scope.getUser = function (userId) {
@@ -63,7 +121,23 @@ app.controller('LoggedController', ['$scope', 'Auth', 'currentAuth', '$firebaseA
     }
 
     $scope.nextOccurrences = function () {
+        $scope.occurrences.page.next();
+        $scope.showOccurrenceCreationSuccess = false;
+        $scope.showOccurrenceCreationFailure = false;
+    }
 
+    $scope.previousOccurrences = function () {
+        $scope.occurrences.page.prev();
+        $scope.showOccurrenceCreationSuccess = false;
+        $scope.showOccurrenceCreationFailure = false;
+    }
+
+    $scope.hasNextPage = function () {
+        return $scope.occurrences.page.hasNext();
+    }
+
+    $scope.hasPreviousPage = function () {
+        return $scope.occurrences.page.hasPrev();
     }
 }]);
 
