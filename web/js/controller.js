@@ -63,7 +63,7 @@ app.factory('$pageArray', ['$firebaseArray', function ($firebaseArray) {
     }
 }]);
 
-app.controller('LoggedController', ['$scope', 'Auth', 'currentAuth', '$firebaseArray', 'userService', '$pageArray', function ($scope, Auth, currentAuth, $firebaseArray, userService, $pageArray) {
+app.controller('LoggedController', ['$scope', 'Auth', 'currentAuth', '$firebaseArray', 'userService', '$pageArray', '$firebaseObject', function ($scope, Auth, currentAuth, $firebaseArray, userService, $pageArray, $firebaseObject) {
     //    console.info("currentAuth: ", currentAuth);
 
     $scope.showNewOccurrence = false;
