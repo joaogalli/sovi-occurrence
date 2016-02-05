@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="sovi-occurrence">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sovi Occurrences</title>
+
+    <!-- Bootstrap -->
+    <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">-->
+    <link href="resources/css/lumen.css" rel="stylesheet">
+
+    <script src="http://code.jquery.com/jquery-1.12.0.js"></script>
+    <!--    <script src="http://code.jquery.com/jquery-2.2.0.js"></script>-->
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>-->
+
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="resources/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="resources/js/app.js"></script>
+    <!--    <script src="js/user-service.js"></script>-->
+    <script src="resources/js/controller.js"/></script>
+
+    <style>
+        body {
+            background-color: #FEFEFE;
+            /*            #CFD8DC */
+            /*            #E0F2F1;*/
+        }
+        
+        .occurrence-author {
+            font-size: 12px;
+            color: cornflowerblue;
+            font-weight: bold;
+        }
+        
+        .occurrence-publish-date {
+            font-size: 12px;
+            color: #AAA;
+        }
+        
+        .occurrence-message {
+            color: #777;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-default" ng-controller="NavController">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#/">Sovi Occurrences</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li ng-hide="isAuthenticated">
+                            <a href="#/login">Login</a>
+                        </li>
+                        <li ng-hide="isAuthenticated">
+                            <a href="#/register">Register</a>
+                        </li>
+                        <li ng-show="isAuthenticated"><a><span class="glyphicon glyphicon-bell" style="font-size: 1.2em;" aria-hidden="true"></span></a></li>
+                        <li ng-show="isAuthenticated" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> João Eduardo Galli <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Configurações</a></li>
+                                <li><a href="#">Editar Perfil</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a ng-click="logout()"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Sair</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+
+        <div ng-view></div>
+    </div>
+
+</body>
+
+</html>
